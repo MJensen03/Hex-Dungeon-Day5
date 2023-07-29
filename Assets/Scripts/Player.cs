@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using DG.Tweening;
+using UnityEngine.UI;
 using System.Runtime.CompilerServices;
 
 [RequireComponent(typeof(Rigidbody2D))]
@@ -20,6 +21,7 @@ public class Player : MonoBehaviour,IHittable
     private int curHealth;
     HPUIScript healthUI;
     [SerializeField] GameObject deathAnim;
+    [SerializeField] Image HealthBar;
 
     [Header("Movement")]
     [SerializeField]
@@ -44,8 +46,6 @@ public class Player : MonoBehaviour,IHittable
     [SerializeField] private float aniMoveSpeed;
 
 
-    [SerializeField]
-    Transform HealthBar;
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -76,9 +76,18 @@ public class Player : MonoBehaviour,IHittable
     }
     private void Start()
     {
+        // prevent risk of erroring out during tutorial scene
+        try
+        {
+            Camera.main.GetComponent<CinemachineBrain>().ActiveVirtualCamera.Follow = this.gameObject.transform;
+
+        }
+        catch
+        {
+            Debug.Log("Required camera type does not exist in this scene");
+        }
         healthUI.SetHealth(curHealth);
         bulletsUI.SetBullets(gunChamber.Count);
-        Camera.main.GetComponent<CinemachineBrain>().ActiveVirtualCamera.Follow = this.gameObject.transform;
     }
     // Update is called once per frame
     void Update()
@@ -90,6 +99,16 @@ public class Player : MonoBehaviour,IHittable
         }*/
         RotateWeapon();
         UpdateAnimator();
+        GetInput();
+    }
+
+
+    private void GetInput()
+    {
+        if(Input.GetKeyDown(KeyCode.R))
+        {
+            Reload(gunChamber.Count, 6);
+        }
     }
 
     void Death()
@@ -112,6 +131,7 @@ public class Player : MonoBehaviour,IHittable
         }
         bulletsUI.SetBullets(gunChamber.Count);
         firePoint.DOPunchRotation(new Vector3(0, 0, 361), .25f);
+
     }
 
 
@@ -192,7 +212,7 @@ public class Player : MonoBehaviour,IHittable
         //rb.MovePosition(rb.position + moveAxis.normalized * moveSpeed * Time.fixedDeltaTime);
     }
 
-    public void Hit(int dam)
+    public void Hit(int dam, Projectile.Spell spellEffect)
     {
         DoDamage(dam);
     }

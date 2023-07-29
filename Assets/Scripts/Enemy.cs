@@ -1,7 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 [RequireComponent(typeof(Rigidbody2D))]
 public class Enemy : MonoBehaviour,IHittable
 {
@@ -21,8 +21,14 @@ public class Enemy : MonoBehaviour,IHittable
     private float maxHealth;
     private float health;
 
+    [Header("Polymorph Sprite")]
+    [SerializeField] private Sprite polymorphSprite;
+    private Sprite origSprite;
+
+    [Header("AI Behavior")]
     [SerializeField]
     private float speed;
+    private float originalSpeed;
     [SerializeField]
     private float stoppingDistance;
     [SerializeField]
@@ -35,7 +41,6 @@ public class Enemy : MonoBehaviour,IHittable
     private float startTimeBtwShots;
     private float timeBtwShots;
 
-    
 
 
     public void Activate(Transform player)
@@ -53,17 +58,51 @@ public class Enemy : MonoBehaviour,IHittable
 
     private void UpdateHealthBar()
     {
-        Debug.Log(health);
+        // Debug.Log(health);
         float percent = health/maxHealth;
-        Debug.Log(percent);
+        // Debug.Log(percent);
         healthBar.localScale = new Vector3(percent, healthBar.localScale.y, healthBar.localScale.z);
         
     }
 
-    public void Hit(int dam)
+    public void Hit(int dam, Projectile.Spell spellEffect)
     {
         DoDamage(dam);
+        DoSpellEffect(spellEffect);
+        Debug.Log(spellEffect);
     }
+
+    private void DoSpellEffect(Projectile.Spell spellEffect)
+    {
+        if(spellEffect == Projectile.Spell.Freeze)
+        {
+            speed = 0;
+            StartCoroutine(ThawOut(1f));
+        }else if(spellEffect == Projectile.Spell.Explosion)
+        {
+
+        }else if(spellEffect == Projectile.Spell.PolyMorph)
+        {
+            StartCoroutine(UnPolyMorph(1f));
+        }
+    }
+
+    IEnumerator UnPolyMorph(float time)
+    {
+        speed /= 4;
+        spriteRend.sprite = polymorphSprite;
+        yield return new WaitForSeconds(time);
+        speed = originalSpeed;
+        spriteRend.sprite = origSprite;
+    }
+
+    IEnumerator ThawOut(float time)
+    {
+        yield return new WaitForSeconds(time);
+
+        speed = originalSpeed;
+    }
+
 
     private void Awake()
     {
@@ -78,6 +117,8 @@ public class Enemy : MonoBehaviour,IHittable
     private void Start()
     {
         timeBtwShots = startTimeBtwShots;
+        originalSpeed = speed;
+        origSprite = spriteRend.sprite;
     }
 
     // Update is called once per frame

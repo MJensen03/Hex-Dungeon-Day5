@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Jobs;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -12,12 +13,23 @@ public class Projectile : MonoBehaviour
     public float speed = 10f;
     private float bounceForce = 0.8f;
 
+    [SerializeField]
+    private int pierceNumber = 2;
+
+    [SerializeField]
+    private int damageTickMax = 2;
+
+
     private Vector2 direction;
 
     private bool canHitSelf;
     private GameObject owner;
     private Rigidbody2D rb;
 
+
+    public enum Spell { Wound, Skewer, Guardian, Freeze, Explosion, PolyMorph }
+    [SerializeField]
+    private Spell spellEffect;
 
     // Start is called before the first frame update
     void Start()
@@ -36,10 +48,30 @@ public class Projectile : MonoBehaviour
         IHittable hit = other.GetComponent<IHittable>();
         if (hit != null)
         {
-            hit.Hit(damage);
-            Destroy(gameObject);
+            hit.Hit(damage, spellEffect);
+            if(spellEffect == Spell.Skewer && pierceNumber  > 0)
+            {
+                pierceNumber--;
+            }
+            else if(spellEffect == Spell.Wound)
+            {
+                StartCoroutine(WoundDamage(hit, 1f));   
+            }else
+                Destroy(gameObject);
         }
 
+    }
+
+
+    private IEnumerator WoundDamage(IHittable enemy,float time)
+    {
+        while(damageTickMax > 0)
+        {
+            yield return new WaitForSeconds(time);
+            damageTickMax--;
+            enemy.Hit(damage, Spell.Wound);
+
+        }
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -64,27 +96,5 @@ public class Projectile : MonoBehaviour
         }
     }
 
-    private enum Spell { Wound, Skewer, Guardian, Frog, Freeze, Explosion }
-    private Spell spellEffect;
 
-    private void SpellEffect()
-    {
-        switch (spellEffect)
-        {
-            case Spell.Wound:
-                break;
-            case Spell.Skewer:
-                break;
-            case Spell.Guardian:
-                break;
-            case Spell.Frog:
-                break;
-            case Spell.Freeze:
-                break;
-            case Spell.Explosion:
-                break;
-            default:
-                break;
-        }
-    }
 }

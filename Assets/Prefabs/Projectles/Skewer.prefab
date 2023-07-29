@@ -105,6 +105,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damage: 1
   speed: 16
+  spellEffect: 1
 --- !u!50 &5122179293473881041
 Rigidbody2D:
   serializedVersion: 4
@@ -160,6 +161,7 @@ CircleCollider2D:
   m_Radius: 0.25
 --- !u!120 &6274399159931726977
 LineRenderer:
+  serializedVersion: 2
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -262,10 +264,13 @@ LineRenderer:
     numCapVertices: 0
     alignment: 0
     textureMode: 0
+    textureScale: {x: 1, y: 1}
     shadowBias: 0.5
     generateLightingData: 0
+  m_MaskInteraction: 0
   m_UseWorldSpace: 1
   m_Loop: 0
+  m_ApplyActiveColorSpace: 0
 --- !u!198 &-8103265785734003738
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -834,6 +839,7 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     randomizeRotationDirection: 0
+    gravitySource: 0
     maxNumParticles: 50
     customEmitterVelocity: {x: 0, y: 0, z: 0}
     size3D: 0
@@ -4218,6 +4224,7 @@ ParticleSystem:
         m_RotationOrder: 4
     minVertexDistance: 0.2
     textureMode: 0
+    textureScale: {x: 1, y: 1}
     ribbonCount: 1
     shadowBias: 0.5
     worldSpace: 0
