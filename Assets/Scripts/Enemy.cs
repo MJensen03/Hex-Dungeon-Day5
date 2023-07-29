@@ -2,6 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static Projectile;
+
 [RequireComponent(typeof(Rigidbody2D))]
 public class Enemy : MonoBehaviour,IHittable
 {
@@ -21,8 +23,9 @@ public class Enemy : MonoBehaviour,IHittable
     private float maxHealth;
     private float health;
 
-    [Header("Polymorph Sprite")]
+    [Header("Effect Sprites")]
     [SerializeField] private Sprite polymorphSprite;
+    [SerializeField] private Sprite freezeSprite;
     private Sprite origSprite;
 
     [Header("AI Behavior")]
@@ -34,9 +37,20 @@ public class Enemy : MonoBehaviour,IHittable
     [SerializeField]
     private float retreatDistance;
 
+    private enum EnemyType { Ranged, Melee }
+
+    [SerializeField]
+    private EnemyType enemyType = EnemyType.Ranged;
+
+    private bool isFrozen;
+
     [Header("shooting")]
     [SerializeField]
     private GameObject projectileObject;
+    [SerializeField]
+    private Transform fireOffset;
+    [SerializeField]
+    private Transform firePoint;
     [SerializeField]
     private float startTimeBtwShots;
     private float timeBtwShots;
@@ -75,23 +89,27 @@ public class Enemy : MonoBehaviour,IHittable
         if(spellEffect == Projectile.Spell.Freeze)
         {
             speed = 0;
+            spriteRend.sprite = freezeSprite;
+            isFrozen = true;
             StartCoroutine(ThawOut(1f));
         }else if(spellEffect == Projectile.Spell.Explosion)
         {
 
         }else if(spellEffect == Projectile.Spell.PolyMorph)
         {
-            StartCoroutine(UnPolyMorph(1f));
+            StartCoroutine(UnPolyMorph(3f));
         }
     }
 
     IEnumerator UnPolyMorph(float time)
     {
+        isFrozen = true;
         speed /= 4;
         spriteRend.sprite = polymorphSprite;
         yield return new WaitForSeconds(time);
         speed = originalSpeed;
         spriteRend.sprite = origSprite;
+        isFrozen = false;
     }
 
     IEnumerator ThawOut(float time)
@@ -99,6 +117,8 @@ public class Enemy : MonoBehaviour,IHittable
         yield return new WaitForSeconds(time);
 
         speed = originalSpeed;
+        spriteRend.sprite = origSprite;
+        isFrozen = false;
     }
 
 
@@ -126,13 +146,24 @@ public class Enemy : MonoBehaviour,IHittable
             return;
 
 
+
         if (health <= 0)
             Destroy(gameObject);
-        if(speed != 0)
-            Movement();
-        UpdateAnimator();
-        FireBullet();
 
+        if (isFrozen) return;
+
+        if (speed != 0)
+            Movement();
+        if (enemyType == EnemyType.Ranged)
+        {
+            RotateFirePoint();
+            FireBullet();
+
+        }
+        else if (enemyType == EnemyType.Melee)
+            Melee();
+
+        UpdateAnimator();
     }
 
     private void Movement()
@@ -148,11 +179,28 @@ public class Enemy : MonoBehaviour,IHittable
         }
     }
 
+    private void Melee()
+    {
+
+    }
+
+    private void RotateFirePoint()
+    {
+        float distanceFromPlayer = Vector2.Distance(player.position, transform.position);
+        Vector2 direction = (player.position - transform.position).normalized;
+        if(distanceFromPlayer > stoppingDistance)
+        {
+            float angle = Mathf.Atan2(player.position.y - fireOffset.position.y, player.position.x - fireOffset.position.x) * Mathf.Rad2Deg -90f;
+            Quaternion targetRotation = Quaternion.Euler(new Vector3(0, 0, angle));
+            fireOffset.rotation = Quaternion.RotateTowards(fireOffset.rotation, targetRotation, 100f * Time.deltaTime);
+        }
+    }
+
     private void FireBullet()
     {
         if (timeBtwShots <= 0)
         {
-            GameObject proj = Instantiate(projectileObject, transform.position, Quaternion.identity);
+            GameObject proj = Instantiate(projectileObject, firePoint.position, fireOffset.rotation);
 
 
             timeBtwShots = startTimeBtwShots;

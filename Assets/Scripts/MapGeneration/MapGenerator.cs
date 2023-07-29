@@ -124,25 +124,19 @@ public class MapGenerator : SimpleRandomWalkGenerator
             }
 
             //-----Generate Dungeon Doors-----//
-            //TODO: BEFORE PUBLISHING, REWRITE THIS!!!!!!!!!!!!!!!
-
-            for(int x = 0; x < maxDecentCount; x++)
+            if (Random.Range(1, 25) == 1 && !decentExists && i < roomsList.Count - 2)
             {
-                if(Random.Range(1,25) == 1 && !decentExists && x < maxDecentCount - 2)
-                {
-                    Vector2 decPos = posList[Random.Range(0, posList.Count)];
-                    GameObject dungeonDoor = Instantiate(decendDoor, new Vector3(decPos.x, decPos.y), Quaternion.identity);
-                    dungeonDoor.transform.parent = roomGameObject.transform;
-                    decentExists = true;
-                }
-                else if(!decentExists && x > maxDecentCount -2)
-                {
-                    Vector2 doorPos = posList[Random.Range(0, posList.Count)];
-                    GameObject dungeonDoor = Instantiate(decendDoor, new Vector3(doorPos.x, doorPos.y), Quaternion.identity);
-                    dungeonDoor.transform.parent = roomGameObject.transform;
-                    decentExists = true;
-                }
-
+                Vector2 decPos = posList[Random.Range(0, posList.Count)];
+                GameObject dungeonDoor = Instantiate(decendDoor, new Vector3(decPos.x, decPos.y), Quaternion.identity);
+                dungeonDoor.transform.parent = roomGameObject.transform;
+                decentExists = true;
+            }
+            else if (!decentExists && i > roomsList.Count - 2)
+            {
+                Vector2 doorPos = posList[Random.Range(0, posList.Count)];
+                GameObject dungeonDoor = Instantiate(decendDoor, new Vector3(doorPos.x, doorPos.y), Quaternion.identity);
+                dungeonDoor.transform.parent = roomGameObject.transform;
+                decentExists = true;
             }
 
 
@@ -280,9 +274,8 @@ public class MapGenerator : SimpleRandomWalkGenerator
             }
 
 
-            //-------------Generate Dungeon Door-----------------
+            //-------------Generate Dungeon Door-----------------//
             int chance = Random.Range(1, 50);
-            // Debug.Log(chance);
             if (chance == 1 && !decentExists && id < roomsList.Count - 1)
             {
                 GameObject dungeonDoor = Instantiate(decendDoor, new Vector3(roomGameObject.transform.position.x + Random.Range(-(room.size.x) / 2 + offset, (room.size.x) / 2 - offset),

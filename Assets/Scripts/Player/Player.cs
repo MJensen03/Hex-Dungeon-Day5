@@ -109,7 +109,7 @@ public class Player : MonoBehaviour,IHittable
     {
         if(Input.GetKeyDown(KeyCode.R))
         {
-            Reload(gunChamber.Count, 6);
+            Reload(0, 5);
         }
     }
 
@@ -179,7 +179,7 @@ public class Player : MonoBehaviour,IHittable
     {
         if (gunChamber.Count == 0)//reload
         {
-            Reload(1, 6);
+            Reload(0, 5);
         }
         else//fire
         {
