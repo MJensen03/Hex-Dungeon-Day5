@@ -21,6 +21,9 @@ public class MapGenerator : SimpleRandomWalkGenerator
     private int maxRoomCount;
     [SerializeField]
     private int maxDecentCount = 1;
+    [SerializeField]
+    [Range(1, 3)]
+    private float dungeonIncrease = 1.3f;
 
     [Header("Room Stuff")]
     
@@ -50,6 +53,29 @@ public class MapGenerator : SimpleRandomWalkGenerator
     bool player_exist = false;
 
     private bool decentExists = false;
+
+
+
+    private void Awake()
+    {
+        GetDungeonSizes();
+
+        UpdateDunegonSizes();
+    }
+
+    private void UpdateDunegonSizes()
+    {
+        PlayerPrefs.SetInt("maxRoomCount", Mathf.CeilToInt(maxRoomCount * dungeonIncrease));
+        PlayerPrefs.SetInt("dungeonWidth", Mathf.CeilToInt(dungeonWidth * dungeonIncrease));
+        PlayerPrefs.SetInt("dungeonHeight", Mathf.CeilToInt(dungeonHeight * dungeonIncrease));
+    }
+
+    private void GetDungeonSizes()
+    {
+        maxRoomCount = PlayerPrefs.GetInt("maxRoomCount");
+        dungeonWidth = PlayerPrefs.GetInt("dungeonWidth");
+        dungeonHeight = PlayerPrefs.GetInt("dungeonHeight");
+    }
 
     protected override void RunProceduralGeneration()
     {
@@ -124,24 +150,19 @@ public class MapGenerator : SimpleRandomWalkGenerator
             }
 
             //-----Generate Dungeon Doors-----//
-
-            for(int x = 0; x < maxDecentCount; x++)
+            if (Random.Range(1, 25) == 1 && !decentExists && i < roomsList.Count - 2)
             {
-                if(Random.Range(1,25) == 1 && !decentExists && x < maxDecentCount - 2)
-                {
-                    Vector2 decPos = posList[Random.Range(0, posList.Count)];
-                    GameObject dungeonDoor = Instantiate(decendDoor, new Vector3(decPos.x, decPos.y), Quaternion.identity);
-                    dungeonDoor.transform.parent = roomGameObject.transform;
-                    decentExists = true;
-                }
-                else if(!decentExists && x > maxDecentCount -2)
-                {
-                    Vector2 doorPos = posList[Random.Range(0, posList.Count)];
-                    GameObject dungeonDoor = Instantiate(decendDoor, new Vector3(doorPos.x, doorPos.y), Quaternion.identity);
-                    dungeonDoor.transform.parent = roomGameObject.transform;
-                    decentExists = true;
-                }
-
+                Vector2 decPos = posList[Random.Range(0, posList.Count)];
+                GameObject dungeonDoor = Instantiate(decendDoor, new Vector3(decPos.x, decPos.y), Quaternion.identity);
+                dungeonDoor.transform.parent = roomGameObject.transform;
+                decentExists = true;
+            }
+            else if (!decentExists && i > roomsList.Count - 2)
+            {
+                Vector2 doorPos = posList[Random.Range(0, posList.Count)];
+                GameObject dungeonDoor = Instantiate(decendDoor, new Vector3(doorPos.x, doorPos.y), Quaternion.identity);
+                dungeonDoor.transform.parent = roomGameObject.transform;
+                decentExists = true;
             }
 
 
@@ -279,9 +300,8 @@ public class MapGenerator : SimpleRandomWalkGenerator
             }
 
 
-
-            int chance = Random.Range(1, 100);
-            Debug.Log(chance);
+            //-------------Generate Dungeon Door-----------------//
+            int chance = Random.Range(1, 50);
             if (chance == 1 && !decentExists && id < roomsList.Count - 1)
             {
                 GameObject dungeonDoor = Instantiate(decendDoor, new Vector3(roomGameObject.transform.position.x + Random.Range(-(room.size.x) / 2 + offset, (room.size.x) / 2 - offset),

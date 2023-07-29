@@ -33,6 +33,7 @@ public class Player : MonoBehaviour,IHittable
     [Header("Shooting")]
     GameObject gunUIObj;
     [SerializeField] GameObject[] projectileObjects;
+    private Weapon hexolver;
     [SerializeField] private Transform weapon,firePoint;
     [SerializeField] private float rotSpeed = 8f;
     [Header("Ammo")]
@@ -56,6 +57,8 @@ public class Player : MonoBehaviour,IHittable
         healthUI = gunUIObj.GetComponent<HPUIScript>();
         rb.gravityScale = 0;
         rb.freezeRotation = true;
+
+        hexolver = firePoint.GetComponent<Weapon>();
 
         healthUI.SetHealth(curHealth);
         bulletsUI.SetBullets(gunChamber.Count);
@@ -109,7 +112,7 @@ public class Player : MonoBehaviour,IHittable
     {
         if(Input.GetKeyDown(KeyCode.R))
         {
-            Reload(gunChamber.Count, 6);
+            Reload(0, 5);
         }
     }
 
@@ -132,7 +135,9 @@ public class Player : MonoBehaviour,IHittable
             gunChamber.Add(Random.Range(min, max));
         }
         bulletsUI.SetBullets(gunChamber.Count);
-        firePoint.DOPunchRotation(new Vector3(0, 0, 361), .25f);
+        hexolver.ReloadAnimUpdate();
+        hexolver.coolDown(hexolver.ReloadTime, hexolver.reloadDone);
+        // firePoint.DOPunchRotation(new Vector3(0, 0, 361), .25f);
 
     }
 
@@ -179,15 +184,17 @@ public class Player : MonoBehaviour,IHittable
     {
         if (gunChamber.Count == 0)//reload
         {
-            Reload(1, 6);
+            Reload(0, 5);
         }
-        else//fire
+        else if(hexolver.canShoot.Value && hexolver.reloadDone.Value)//fire
         {
             GameObject proj = Instantiate(projectileObjects[gunChamber[0]], firePoint.transform.position, weapon.rotation);
             gunChamber.RemoveAt(0);
             weapon.DOPunchRotation(new Vector3(0, 0, 60f), 0.12f);
 
             bulletsUI.SetBullets(gunChamber.Count);
+            hexolver.fireAnimUpdate();
+            hexolver.coolDown(hexolver.SetFireRate, hexolver.canShoot);
         }
     }
     public void DoDamage(int damage)
@@ -195,19 +202,12 @@ public class Player : MonoBehaviour,IHittable
         curHealth -= damage;
         healthUI.SetHealth(curHealth);
 
-        UpdateHealthBar();
 
         if (curHealth <= 0)
         {
             Death();
         }
     }
-
-    private void UpdateHealthBar()
-    {
-
-    }
-
     private void FixedUpdate()
     {
         rb.velocity = moveAxis.normalized * moveSpeed /** Time.fixedDeltaTime*/;

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class RestartButtonScript : MonoBehaviour
 {
@@ -12,6 +13,13 @@ public class RestartButtonScript : MonoBehaviour
 
     public void RestartButtonPressed()
     {
-        // Restart Scene or Respawn Player
+        PlayerPrefs.SetInt("level", 0);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+
+        PlayerPrefs.SetInt("level", 0);
+        PlayerPrefs.SetInt("maxRoomCount", 5);
+        PlayerPrefs.SetInt("dungeonWidth", 120);
+        PlayerPrefs.SetInt("dungeonHeight", 80);
+
     }
 }

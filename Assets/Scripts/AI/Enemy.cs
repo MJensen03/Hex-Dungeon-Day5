@@ -196,7 +196,6 @@ public class Enemy : MonoBehaviour,IHittable
     private void RotateFirePoint()
     {
         float distanceFromPlayer = Vector2.Distance(player.position, transform.position);
-        // Vector2 direction = (player.position - transform.position).normalized;
         if(distanceFromPlayer > retreatDistance)
         {
             float angle = Mathf.Atan2(player.position.y - fireOffset.position.y, player.position.x - fireOffset.position.x) * Mathf.Rad2Deg -90f;

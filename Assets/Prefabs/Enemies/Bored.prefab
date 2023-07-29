@@ -168,6 +168,37 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &4394479691828352346
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8054463471986569821}
+  m_Layer: 0
+  m_Name: FirePoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8054463471986569821
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4394479691828352346}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.14, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6627289714942762618}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4443002691742813508
 GameObject:
   m_ObjectHideFlags: 0
@@ -286,6 +317,7 @@ Transform:
   - {fileID: 6175621735243179056}
   - {fileID: 7799512135423000599}
   - {fileID: 4981431759023186080}
+  - {fileID: 6627289714942762618}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -305,12 +337,16 @@ MonoBehaviour:
   active: 0
   healthBar: {fileID: 3146910169730895646}
   maxHealth: 5
-  polymorphSprite: {fileID: 0}
-  speed: 4
+  polymorphSprite: {fileID: 21300000, guid: 2a188b74f87c7dc4cbe7827e026fc357, type: 3}
+  freezeSprite: {fileID: 21300000, guid: 103b1ce3c646a30459d8a068777f89d0, type: 3}
+  speed: 5
   stoppingDistance: 2
-  retreatDistance: 5
+  retreatDistance: 1
+  enemyType: 1
   projectileObject: {fileID: 6514229213537963326, guid: 3a3e1450e248e09419e3e0b4f7d77963, type: 3}
-  startTimeBtwShots: 12
+  fireOffset: {fileID: 6627289714942762618}
+  firePoint: {fileID: 8054463471986569821}
+  startTimeBtwShots: 2
   aniMoveSpeed: 0
   yAmp: 0.1
   yFrq: 24
@@ -361,6 +397,38 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!1 &8437261601461089569
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6627289714942762618}
+  m_Layer: 0
+  m_Name: FireOffset
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6627289714942762618
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8437261601461089569}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 8054463471986569821}
+  m_Father: {fileID: 6342794010561626006}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8739167102571120782
 GameObject:
   m_ObjectHideFlags: 0
