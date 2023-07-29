@@ -57,6 +57,11 @@ public class Player : MonoBehaviour,IHittable
         rb.gravityScale = 0;
         rb.freezeRotation = true;
 
+        healthUI.SetHealth(curHealth);
+        bulletsUI.SetBullets(gunChamber.Count);
+
+
+
         curHealth = maxHealth;
         controls = new PlayerControls();
     }
@@ -68,6 +73,18 @@ public class Player : MonoBehaviour,IHittable
         fire = controls.Player.Fire;
         fire.Enable();
         fire.performed += Fire;
+        StartCoroutine(GetCamera());
+    }
+
+
+
+    IEnumerator GetCamera()
+    {
+        //Dirty way to make sure to get the camera after the scene has loaded.
+        yield return new WaitForSeconds(1f);
+        Camera.main.GetComponent<CinemachineBrain>().ActiveVirtualCamera.Follow = this.gameObject.transform;
+
+
     }
     private void OnDisable()
     {
@@ -76,27 +93,12 @@ public class Player : MonoBehaviour,IHittable
     }
     private void Start()
     {
-        // prevent risk of erroring out during tutorial scene
-        try
-        {
-            Camera.main.GetComponent<CinemachineBrain>().ActiveVirtualCamera.Follow = this.gameObject.transform;
 
-        }
-        catch
-        {
-            Debug.Log("Required camera type does not exist in this scene");
-        }
-        healthUI.SetHealth(curHealth);
-        bulletsUI.SetBullets(gunChamber.Count);
     }
     // Update is called once per frame
     void Update()
     {
         moveAxis = move.ReadValue<Vector2>();
-/*        if (moveAxis != Vector2.zero)
-        {
-            RotateWeapon();
-        }*/
         RotateWeapon();
         UpdateAnimator();
         GetInput();

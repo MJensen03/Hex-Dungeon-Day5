@@ -6,9 +6,10 @@ public class GameStarter : MonoBehaviour
 {
     
  
-    void Start()
+    void Awake()
     {
         FindObjectOfType<MapGenerator>().GenerateDungeon();
+        Debug.Log("here");
     }
 
     

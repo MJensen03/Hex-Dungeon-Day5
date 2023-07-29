@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -17,6 +19,8 @@ public class MapGenerator : SimpleRandomWalkGenerator
     private int offset = 10;
     [SerializeField]
     private int maxRoomCount;
+    [SerializeField]
+    private int maxDecentCount = 1;
 
     [Header("Room Stuff")]
     
@@ -40,9 +44,12 @@ public class MapGenerator : SimpleRandomWalkGenerator
 
     [SerializeField]
     private GameObject playerObject;
+    [SerializeField]
+    private GameObject decendDoor;
 
     bool player_exist = false;
 
+    private bool decentExists = false;
 
     protected override void RunProceduralGeneration()
     {
@@ -115,6 +122,29 @@ public class MapGenerator : SimpleRandomWalkGenerator
                     new Vector3(decPos.x, decPos.y), Quaternion.identity);
                 decoration.transform.parent = roomGameObject.transform;
             }
+
+            //-----Generate Dungeon Doors-----//
+
+            for(int x = 0; x < maxDecentCount; x++)
+            {
+                if(Random.Range(1,25) == 1 && !decentExists && x < maxDecentCount - 2)
+                {
+                    Vector2 decPos = posList[Random.Range(0, posList.Count)];
+                    GameObject dungeonDoor = Instantiate(decendDoor, new Vector3(decPos.x, decPos.y), Quaternion.identity);
+                    dungeonDoor.transform.parent = roomGameObject.transform;
+                    decentExists = true;
+                }
+                else if(!decentExists && x > maxDecentCount -2)
+                {
+                    Vector2 doorPos = posList[Random.Range(0, posList.Count)];
+                    GameObject dungeonDoor = Instantiate(decendDoor, new Vector3(doorPos.x, doorPos.y), Quaternion.identity);
+                    dungeonDoor.transform.parent = roomGameObject.transform;
+                    decentExists = true;
+                }
+
+            }
+
+
             //----Generate Enemies-----------------------//
 
             if (player_exist)
@@ -133,6 +163,9 @@ public class MapGenerator : SimpleRandomWalkGenerator
 
                 }
             }
+
+
+
 
             CreatePlayer(roomGameObject.transform.position);
 
@@ -244,6 +277,30 @@ public class MapGenerator : SimpleRandomWalkGenerator
                                 roomGameObject.transform.position.y + Random.Range(-(room.size.y) / 2 + offset, (room.size.y) / 2 - offset)), Quaternion.identity);
                 decoration.transform.parent = roomGameObject.transform;
             }
+
+
+
+            int chance = Random.Range(1, 100);
+            Debug.Log(chance);
+            if (chance == 1 && !decentExists && id < roomsList.Count - 1)
+            {
+                GameObject dungeonDoor = Instantiate(decendDoor, new Vector3(roomGameObject.transform.position.x + Random.Range(-(room.size.x) / 2 + offset, (room.size.x) / 2 - offset),
+                            roomGameObject.transform.position.y + Random.Range(-(room.size.y) / 2 + offset, (room.size.y) / 2 - offset)), Quaternion.identity);
+                dungeonDoor.transform.parent = roomGameObject.transform;
+                decentExists = true;
+            }
+            else if (!decentExists && id >= roomsList.Count - 1 )
+            {
+                    
+                GameObject dungeonDoor = Instantiate(decendDoor, new Vector3(roomGameObject.transform.position.x + Random.Range(-(room.size.x) / 2 + offset, (room.size.x) / 2 - offset),
+                            roomGameObject.transform.position.y + Random.Range(-(room.size.y) / 2 + offset, (room.size.y) / 2 - offset)), Quaternion.identity);
+                dungeonDoor.transform.parent = roomGameObject.transform;
+                decentExists = true;
+            }
+
+
+
+
             //----Generate Enemies-----------------------//
 
             if (player_exist)
@@ -263,7 +320,6 @@ public class MapGenerator : SimpleRandomWalkGenerator
             }
 
             CreatePlayer(roomGameObject.transform.position);
-
         }
         return floor;
     }

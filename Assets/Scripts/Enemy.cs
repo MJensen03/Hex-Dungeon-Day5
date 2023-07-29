@@ -69,7 +69,7 @@ public class Enemy : MonoBehaviour,IHittable
     {
         DoDamage(dam);
         DoSpellEffect(spellEffect);
-        Debug.Log(spellEffect);
+        Debug.Log(speed);
     }
 
     private void DoSpellEffect(Projectile.Spell spellEffect)
