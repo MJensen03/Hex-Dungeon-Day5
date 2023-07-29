@@ -13,6 +13,9 @@ public class Enemy : MonoBehaviour,IHittable
     [SerializeField]
     private bool active = false;
 
+    [SerializeField]
+    private Transform healthBar;
+
 
     [SerializeField]
     private float maxHealth;
@@ -44,6 +47,17 @@ public class Enemy : MonoBehaviour,IHittable
     {
         if(active)
              health -= damage;
+
+        UpdateHealthBar();
+    }
+
+    private void UpdateHealthBar()
+    {
+        Debug.Log(health);
+        float percent = health/maxHealth;
+        Debug.Log(percent);
+        healthBar.localScale = new Vector3(percent, healthBar.localScale.y, healthBar.localScale.z);
+        
     }
 
     public void Hit(int dam)

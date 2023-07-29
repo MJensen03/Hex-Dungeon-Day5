@@ -43,6 +43,9 @@ public class Player : MonoBehaviour,IHittable
     [SerializeField] private float yAmp = 0.1f, yFrq = 16f;
     [SerializeField] private float aniMoveSpeed;
 
+
+    [SerializeField]
+    Transform HealthBar;
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -124,7 +127,7 @@ public class Player : MonoBehaviour,IHittable
         mouse_pos.y = mouse_pos.y - object_pos.y;
         angle = Mathf.Atan2(mouse_pos.y, mouse_pos.x) * Mathf.Rad2Deg - 90f;
         weapon.rotation = Quaternion.Euler(0, 0, angle);
-        Debug.Log(weapon.transform.rotation);
+        // Debug.Log(weapon.transform.rotation);
         if ((weapon.rotation.z < -180 && weapon.rotation.z > -360))
             weapon.transform.localScale = new Vector3(-1, 1, 1);
         else
@@ -170,10 +173,17 @@ public class Player : MonoBehaviour,IHittable
         curHealth -= damage;
         healthUI.SetHealth(curHealth);
 
+        UpdateHealthBar();
+
         if (curHealth <= 0)
         {
             Death();
         }
+    }
+
+    private void UpdateHealthBar()
+    {
+
     }
 
     private void FixedUpdate()
