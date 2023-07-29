@@ -193,7 +193,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damage: 1
   speed: 16
-  spellEffect: 4
+  pierceNumber: 2
+  damageTickMax: 2
+  spellEffect: 3
 --- !u!50 &5122179293473881041
 Rigidbody2D:
   serializedVersion: 4

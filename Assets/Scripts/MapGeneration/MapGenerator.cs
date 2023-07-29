@@ -124,6 +124,7 @@ public class MapGenerator : SimpleRandomWalkGenerator
             }
 
             //-----Generate Dungeon Doors-----//
+            //TODO: BEFORE PUBLISHING, REWRITE THIS!!!!!!!!!!!!!!!
 
             for(int x = 0; x < maxDecentCount; x++)
             {
@@ -279,9 +280,9 @@ public class MapGenerator : SimpleRandomWalkGenerator
             }
 
 
-
-            int chance = Random.Range(1, 100);
-            Debug.Log(chance);
+            //-------------Generate Dungeon Door-----------------
+            int chance = Random.Range(1, 50);
+            // Debug.Log(chance);
             if (chance == 1 && !decentExists && id < roomsList.Count - 1)
             {
                 GameObject dungeonDoor = Instantiate(decendDoor, new Vector3(roomGameObject.transform.position.x + Random.Range(-(room.size.x) / 2 + offset, (room.size.x) / 2 - offset),

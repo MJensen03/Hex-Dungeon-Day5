@@ -58,9 +58,7 @@ public class Enemy : MonoBehaviour,IHittable
 
     private void UpdateHealthBar()
     {
-        // Debug.Log(health);
         float percent = health/maxHealth;
-        // Debug.Log(percent);
         healthBar.localScale = new Vector3(percent, healthBar.localScale.y, healthBar.localScale.z);
         
     }
@@ -130,8 +128,8 @@ public class Enemy : MonoBehaviour,IHittable
 
         if (health <= 0)
             Destroy(gameObject);
-        
-        Movement();
+        if(speed != 0)
+            Movement();
         UpdateAnimator();
         FireBullet();
 

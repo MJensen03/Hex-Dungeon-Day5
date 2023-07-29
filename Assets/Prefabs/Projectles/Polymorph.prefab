@@ -107,7 +107,7 @@ MonoBehaviour:
   speed: 16
   pierceNumber: 0
   damageTickMax: 0
-  spellEffect: 6
+  spellEffect: 5
 --- !u!50 &5122179293473881041
 Rigidbody2D:
   serializedVersion: 4

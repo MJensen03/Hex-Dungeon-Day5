@@ -351,7 +351,7 @@ GameObject:
   - component: {fileID: 165087746130185876}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -389,6 +389,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 6
   deathAnim: {fileID: 1315277639374895588, guid: 53e43aa7af1a0b8429370d4810f79bf4, type: 3}
+  HealthBar: {fileID: 0}
   moveSpeed: 6
   projectileObjects:
   - {fileID: 6514229213537963326, guid: a21cdfc9f6e5f4149a4472a3bcbc37de, type: 3}
