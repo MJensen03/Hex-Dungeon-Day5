@@ -21,6 +21,9 @@ public class MapGenerator : SimpleRandomWalkGenerator
     private int maxRoomCount;
     [SerializeField]
     private int maxDecentCount = 1;
+    [SerializeField]
+    [Range(1, 3)]
+    private float dungeonIncrease = 1.3f;
 
     [Header("Room Stuff")]
     
@@ -50,6 +53,29 @@ public class MapGenerator : SimpleRandomWalkGenerator
     bool player_exist = false;
 
     private bool decentExists = false;
+
+
+
+    private void Awake()
+    {
+        GetDungeonSizes();
+
+        UpdateDunegonSizes();
+    }
+
+    private void UpdateDunegonSizes()
+    {
+        PlayerPrefs.SetInt("maxRoomCount", Mathf.CeilToInt(maxRoomCount * dungeonIncrease));
+        PlayerPrefs.SetInt("dungeonWidth", Mathf.CeilToInt(dungeonWidth * dungeonIncrease));
+        PlayerPrefs.SetInt("dungeonHeight", Mathf.CeilToInt(dungeonHeight * dungeonIncrease));
+    }
+
+    private void GetDungeonSizes()
+    {
+        maxRoomCount = PlayerPrefs.GetInt("maxRoomCount");
+        dungeonWidth = PlayerPrefs.GetInt("dungeonWidth");
+        dungeonHeight = PlayerPrefs.GetInt("dungeonHeight");
+    }
 
     protected override void RunProceduralGeneration()
     {

@@ -15,5 +15,11 @@ public class RestartButtonScript : MonoBehaviour
     {
         PlayerPrefs.SetInt("level", 0);
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+
+        PlayerPrefs.SetInt("level", 0);
+        PlayerPrefs.SetInt("maxRoomCount", 5);
+        PlayerPrefs.SetInt("dungeonWidth", 120);
+        PlayerPrefs.SetInt("dungeonHeight", 80);
+
     }
 }
