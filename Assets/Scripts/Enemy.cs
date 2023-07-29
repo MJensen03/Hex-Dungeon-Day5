@@ -181,18 +181,27 @@ public class Enemy : MonoBehaviour,IHittable
 
     private void Melee()
     {
-
+        float distanceFromPlayer = Vector2.Distance(player.position, transform.position);
+        if (distanceFromPlayer <= stoppingDistance && timeBtwShots <= 0)
+        {
+            player.GetComponent<Player>().Hit(1, Spell.Wound);
+            timeBtwShots = startTimeBtwShots;
+        }
+        else
+        {
+            timeBtwShots -= Time.deltaTime;
+        }
     }
 
     private void RotateFirePoint()
     {
         float distanceFromPlayer = Vector2.Distance(player.position, transform.position);
-        Vector2 direction = (player.position - transform.position).normalized;
-        if(distanceFromPlayer > stoppingDistance)
+        // Vector2 direction = (player.position - transform.position).normalized;
+        if(distanceFromPlayer > retreatDistance)
         {
             float angle = Mathf.Atan2(player.position.y - fireOffset.position.y, player.position.x - fireOffset.position.x) * Mathf.Rad2Deg -90f;
             Quaternion targetRotation = Quaternion.Euler(new Vector3(0, 0, angle));
-            fireOffset.rotation = Quaternion.RotateTowards(fireOffset.rotation, targetRotation, 100f * Time.deltaTime);
+            fireOffset.rotation = Quaternion.RotateTowards(fireOffset.rotation, targetRotation, 300f * Time.deltaTime);
         }
     }
 

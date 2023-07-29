@@ -348,7 +348,7 @@ MonoBehaviour:
   projectileObject: {fileID: 6514229213537963326, guid: 3a3e1450e248e09419e3e0b4f7d77963, type: 3}
   fireOffset: {fileID: 1947680159986709321}
   firePoint: {fileID: 2131759588028530636}
-  startTimeBtwShots: 4
+  startTimeBtwShots: 2
   aniMoveSpeed: 1
   yAmp: 0.1
   yFrq: 24

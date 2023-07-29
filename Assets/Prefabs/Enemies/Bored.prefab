@@ -341,7 +341,7 @@ MonoBehaviour:
   freezeSprite: {fileID: 21300000, guid: 103b1ce3c646a30459d8a068777f89d0, type: 3}
   speed: 4
   stoppingDistance: 2
-  retreatDistance: 5
+  retreatDistance: 1
   enemyType: 1
   projectileObject: {fileID: 6514229213537963326, guid: 3a3e1450e248e09419e3e0b4f7d77963, type: 3}
   fireOffset: {fileID: 6627289714942762618}
