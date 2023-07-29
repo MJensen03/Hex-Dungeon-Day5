@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using DG.Tweening;
+using System.Runtime.CompilerServices;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class Player : MonoBehaviour,IHittable
@@ -80,10 +81,11 @@ public class Player : MonoBehaviour,IHittable
     void Update()
     {
         moveAxis = move.ReadValue<Vector2>();
-        if (moveAxis != Vector2.zero)
+/*        if (moveAxis != Vector2.zero)
         {
             RotateWeapon();
-        }
+        }*/
+        RotateWeapon();
         UpdateAnimator();
     }
 
@@ -108,13 +110,28 @@ public class Player : MonoBehaviour,IHittable
         bulletsUI.SetBullets(gunChamber.Count);
         firePoint.DOPunchRotation(new Vector3(0, 0, 361), .25f);
     }
+
+
     private void RotateWeapon()
     {
-        lookAxis = new Vector2(Mathf.Sin(moveAxis.x), Mathf.Sin(moveAxis.y));
-        float angle = Mathf.Atan2(lookAxis.y, lookAxis.x) * Mathf.Rad2Deg;
-        Quaternion newRot = Quaternion.Euler(0, 0, angle - 90f);
-        weapon.rotation = Quaternion.Slerp(transform.rotation, newRot, rotSpeed);
+        Vector3 mouse_pos;
+        Vector3 object_pos;
+        float angle;
+        mouse_pos = Input.mousePosition;
+        mouse_pos.z = -20;
+        object_pos = Camera.main.WorldToScreenPoint(weapon.position);
+        mouse_pos.x = mouse_pos.x - object_pos.x;
+        mouse_pos.y = mouse_pos.y - object_pos.y;
+        angle = Mathf.Atan2(mouse_pos.y, mouse_pos.x) * Mathf.Rad2Deg - 90f;
+        weapon.rotation = Quaternion.Euler(0, 0, angle);
+        Debug.Log(weapon.transform.rotation);
+        if ((weapon.rotation.z < -180 && weapon.rotation.z > -360))
+            weapon.transform.localScale = new Vector3(-1, 1, 1);
+        else
+            weapon.transform.localScale = new Vector3(1, 1, 1);
+        // Debug.Log(weapon.rotation);
     }
+
 
     void UpdateAnimator()
     {
