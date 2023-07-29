@@ -22,7 +22,7 @@ public class DungeonDoor : MonoBehaviour
 
        
         
-        SceneManager.LoadScene(1);
+        SceneManager.LoadScene(2);
 
     }
 }

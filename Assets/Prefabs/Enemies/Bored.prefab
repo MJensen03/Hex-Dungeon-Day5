@@ -339,7 +339,7 @@ MonoBehaviour:
   maxHealth: 5
   polymorphSprite: {fileID: 21300000, guid: 2a188b74f87c7dc4cbe7827e026fc357, type: 3}
   freezeSprite: {fileID: 21300000, guid: 103b1ce3c646a30459d8a068777f89d0, type: 3}
-  speed: 4
+  speed: 5
   stoppingDistance: 2
   retreatDistance: 1
   enemyType: 1

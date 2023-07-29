@@ -328,9 +328,10 @@ MonoBehaviour:
   walkParameters: {fileID: 11400000, guid: 49417390d7b7ea94a86c8c5b5a093317, type: 2}
   dungeonWidth: 120
   dungeonHeight: 80
-  offset: 3
+  offset: 5
   maxRoomCount: 5
   maxDecentCount: 1
+  dungeonIncrease: 1.3
   createBasicRooms: 1
   minRoomWidth: 16
   minRoomHeight: 16
